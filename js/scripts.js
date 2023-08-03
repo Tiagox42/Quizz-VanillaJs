@@ -77,7 +77,52 @@ const questions = [
 
 // Substituição do quizz para a primeira pergunta
 function init() {
-    console.log("O jogo iníciou!");
+    createQuestion(0);
 }
 
+// Cria uma pergunta
+function createQuestion(i) {
+  
+  // Limpa a questão anterior
+  const oldButtons = answersBox.querySelectorAll("button");
+
+  oldButtons.forEach(function(btn) {
+    btn.remove();
+  });
+
+  // Alterar o texto da pergunta
+  const questionText = question.querySelector("#question-text");
+  const questionNumber = question.querySelector("question-number");
+
+
+  questionText.textContent = question[i].question;
+  questionNumber.textContent = i + 1;
+
+  // Insere as alternativas
+  question[i].answer.forEach(function(answer, i) {
+
+    // Cria o template do botão do quizz
+    const answerTemplate = document.querySelector(".answer-template").cloneNode(true);
+
+    const letterBtn = answerTemplate.querySelector(".btn-letter");
+    const answerText = answerTemplate.querySelector(".question-answer");
+
+    letterBtn.textContent = letter[i];
+    answerText.textContent = answer['answer'];
+
+    answerTemplate.setAttribute("correct-answer", answer["correct"]);
+
+    // Remover Hide e template class
+    answerTemplate.classList.remove("hide");
+    answerTemplate.classList.remove("answer-template");
+
+    //Inserir a alternativa na tela
+    answersBox.appendChild(answerTemplate);
+
+  })
+
+}
+
+// Inicia Quiz
+init();
 
