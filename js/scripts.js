@@ -92,14 +92,14 @@ function createQuestion(i) {
 
   // Alterar o texto da pergunta
   const questionText = question.querySelector("#question-text");
-  const questionNumber = question.querySelector("question-number");
+  const questionNumber = question.querySelector("#question-number");
 
 
-  questionText.textContent = question[i].question;
+  questionText.textContent = questions[i].question;
   questionNumber.textContent = i + 1;
 
   // Insere as alternativas
-  question[i].answer.forEach(function(answer, i) {
+  questions[i].answers.forEach(function(answer, i) {
 
     // Cria o template do botão do quizz
     const answerTemplate = document.querySelector(".answer-template").cloneNode(true);
@@ -107,7 +107,7 @@ function createQuestion(i) {
     const letterBtn = answerTemplate.querySelector(".btn-letter");
     const answerText = answerTemplate.querySelector(".question-answer");
 
-    letterBtn.textContent = letter[i];
+    letterBtn.textContent = letters[i];
     answerText.textContent = answer['answer'];
 
     answerTemplate.setAttribute("correct-answer", answer["correct"]);
@@ -119,9 +119,66 @@ function createQuestion(i) {
     //Inserir a alternativa na tela
     answersBox.appendChild(answerTemplate);
 
-  })
+    // Evento de click
+    answerTemplate.addEventListener("click", function() {
+      checkAnswer(this);
+    })
+
+  });
+
+  // Incrementa número da questão
+  actualQuestion++;
 
 }
+
+// verificando resposta
+function checkAnswer(btn) {
+
+  // selecionar todos os botões
+  const buttons = answersBox.querySelectorAll("button");
+
+  //verifica se a resposta está correta e adiciona classes nos botões
+  buttons.forEach(function(button) {
+    if(button.getAttribute("correct-answer") === "true") {
+
+      button.classList.add("correct-answer");
+
+      // verifica se acertou
+      if(btn === button) {
+        //incremento
+        points++;
+      }
+
+    } else {
+
+      button.classList.add("wrong-answer");
+
+    }
+
+  });
+
+  //Exibir próxima pergunta
+  nextQuestion();
+
+}
+
+//Exibe a próxima pergunta do quizz
+function nextQuestion() {
+
+  //timer para usuário ver as respostas
+  setTimeout(function() {
+    
+    //verifica se ainda há perguntas
+    if(actualQuestion >= questions.length) {
+    // apresenta a msg de sucesso
+    }
+
+    createQuestion(actualQuestion)
+
+  }, 1500);
+
+}
+
 
 // Inicia Quiz
 init();
